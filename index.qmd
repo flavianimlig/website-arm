@@ -1,0 +1,27 @@
+---
+title: "Alphorngruppe Rigi-Mythen"
+# subtitle: "Data Scientist"
+image: profile.jpg
+about: # https://quarto.org/docs/websites/website-about.html
+  template: trestles
+  links:
+    - icon: envelope-at-fill
+      text: Kontakt
+      href: mailto:info@rigi-mythen.ch
+    - icon: mastodon
+      text: Mastodon
+      href: https://swiss.social/@alphorngruppe_rigi_mythen
+navbar: false
+---
+
+Seit 2001 lassen wir die Klänge des Alphorns im Talkessel Schwyz und darüber hinaus erklingen. Unsere Gruppe ist in dieser Region verwurzelt, und die meisten unserer Mitglieder sind hier zu Hause.
+
+## Präsident
+
+Sebi Baggenstos  
+6424 Lauerz
+
+## Musikalischer Leiter
+
+Armin Imlig  
+6410 Goldau

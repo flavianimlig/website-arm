@@ -1,0 +1,41 @@
+/*-- scss:defaults --*/
+
+// Sass Variables
+// https://quarto.org/docs/output-formats/html-themes.html#sass-variables
+
+/*-- scss:defaults --*/
+
+// Core
+$body-bg:    #F7F3EC;   // warmes Cremeweiß (helles Holz)
+$body-color: #2E2A22;   // dunkles Walnuss (Baumrinde)
+$link-color: #5A7A3A;   // Blattgrün
+
+// Inputs & Popovers
+$input-bg:   #EDE7DA;   // leicht getöntes Beige
+$popover-bg: #F7F3EC;
+
+// Navigation
+$navbar-bg:  #7A5C38;   // mittleres Holzbraun
+$navbar-fg:  #F7F3EC;   // Cremeweiß
+$navbar-hl:  #C8E6A0;   // helles Grasgrün
+
+$sidebar-bg: #EDE7DA;
+$sidebar-fg: #2E2A22;
+$sidebar-hl: #5A7A3A;
+
+$footer-bg:  #D9CFBF;   // gedämpftes Sandbeige
+$footer-fg:  #2E2A22;
+
+// TOC
+$toc-color:           #5A7A3A;
+$toc-active-border:   #7A5C38;
+$toc-inactive-border: #B8A88A;
+
+// Code
+$code-block-bg:            #EDE7DA;
+$code-block-border-left:   #7A5C38;
+$code-color:               #5A3E1B;
+
+/* Fonts */
+$font-family-sans-serif: "Source Sans Pro", -apple-system, "system-ui", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+$font-size-root: 17px;
