@@ -3,7 +3,7 @@ title: "Alphorngruppe Rigi-Mythen"
 # subtitle: "Data Scientist"
 image: profile.jpg
 about: # https://quarto.org/docs/websites/website-about.html
-  template: trestles
+  template: solana
   links:
     - icon: envelope-at-fill
       text: Kontakt
