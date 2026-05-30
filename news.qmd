@@ -1,0 +1,188 @@
+---
+title: "Neuigkeiten"
+format:
+  html:
+    page-layout: article
+    toc: false
+    echo: false
+    css: styles-mastodon.css
+---
+
+```{=html}
+<div id="posts-section" style="display:none">
+  <p id="post-count" class="post-count"></p>
+  <div id="posts-container"></div>
+  <div id="load-more-row" style="text-align:center;display:none;padding:1rem 0 2rem">
+    <button onclick="loadMore()">Mehr laden</button>
+  </div>
+</div>
+
+<p id="status-msg" class="status-msg">Wird geladen…</p>
+<p id="error-msg" class="error-msg" style="display:none"></p>
+
+<script>
+const INSTANCE = 'swiss.social';
+const USERNAME  = 'alphorngruppe_rigi_mythen';
+
+let accountId = null;
+let maxId     = null;
+let totalShown = 0;
+let fetching  = false;
+
+function setStatus(msg) {
+  const el = document.getElementById('status-msg');
+  el.style.display = msg ? 'block' : 'none';
+  el.textContent = msg || '';
+}
+function setError(msg) {
+  const el = document.getElementById('error-msg');
+  el.style.display = msg ? 'block' : 'none';
+  el.textContent = msg || '';
+}
+function updateCount() {
+  document.getElementById('post-count').textContent =
+    `${totalShown} Post${totalShown !== 1 ? 's' : ''}`;
+}
+
+async function init() {
+  setStatus('Lade Profil…');
+  try {
+    const res = await fetch(
+      `https://${INSTANCE}/api/v1/accounts/lookup?acct=${USERNAME}`
+    );
+    if (!res.ok) throw new Error(`Profil nicht gefunden (HTTP ${res.status})`);
+    const account = await res.json();
+    accountId = account.id;
+    <!-- renderProfile(account); -->
+    setStatus('Lade Posts…');
+    await loadMore();
+  } catch (e) {
+    setStatus('');
+    setError('Fehler: ' + e.message);
+  }
+}
+
+function renderProfile(a) {
+  const followersK = a.followers_count >= 1000
+    ? (a.followers_count / 1000).toFixed(1) + 'K'
+    : a.followers_count.toLocaleString('de-CH');
+  const bio = a.note ? a.note.replace(/<[^>]+>/g, '') : '';
+  document.getElementById('profile-card').innerHTML = `
+    <div class="profile-top">
+      <img class="avatar" src="${a.avatar}" onerror="this.style.display='none'" alt="">
+      <div class="profile-info">
+        <h2>${a.display_name || a.username}</h2>
+        <div class="handle">@${a.username}@${INSTANCE}</div>
+      </div>
+    </div>
+    ${bio ? `<div class="profile-bio">${bio}</div>` : ''}
+    <div class="profile-stats">
+      <span class="stat"><strong>${a.statuses_count.toLocaleString('de-CH')}</strong> Posts</span>
+      <span class="stat"><strong>${followersK}</strong> Follower</span>
+      <span class="stat"><strong>${a.following_count.toLocaleString('de-CH')}</strong> Folge ich</span>
+    </div>
+  `;
+  document.getElementById('profile-card').style.display = 'block';
+}
+
+async function loadMore() {
+  if (fetching) return;
+  fetching = true;
+  document.getElementById('load-more-row').style.display = 'none';
+  setStatus('Lade Posts…');
+
+  let url = `https://${INSTANCE}/api/v1/accounts/${accountId}/statuses?limit=20`;
+  if (maxId) url += `&max_id=${maxId}`;
+
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const posts = await res.json();
+
+    if (posts.length === 0) {
+      setStatus(totalShown === 0 ? 'Keine Posts gefunden.' : '');
+      fetching = false;
+      return;
+    }
+
+    maxId = posts[posts.length - 1].id;
+    renderPosts(posts);
+    totalShown += posts.length;
+    updateCount();
+    document.getElementById('posts-section').style.display = 'block';
+    document.getElementById('load-more-row').style.display = 'block';
+    setStatus('');
+  } catch (e) {
+    setStatus('');
+    setError('Fehler beim Laden: ' + e.message);
+  }
+
+  fetching = false;
+}
+
+function renderPosts(posts) {
+  const container = document.getElementById('posts-container');
+
+  for (const p of posts) {
+    const isBoost = !!p.reblog;
+    const content = isBoost ? p.reblog : p;
+    const date = new Date(content.created_at).toLocaleDateString('de-CH', {
+      day: 'numeric', month: 'short', year: 'numeric'
+    });
+    const media = (content.media_attachments || [])
+      .filter(m => m.type === 'image')
+      .slice(0, 4);
+    const mediaHtml = media.length > 0
+      ? `<div class="media-grid">${media.map(m =>
+          `<img src="${m.preview_url}" alt="${m.description || ''}">`
+        ).join('')}</div>`
+      : '';
+    const boostHtml = isBoost
+      ? `<div class="boost-label">
+           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
+             <path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/>
+             <path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/>
+           </svg>
+           ${p.account.display_name || p.account.username} hat geteilt
+         </div>`
+      : '';
+
+    const div = document.createElement('div');
+    div.className = 'post-card';
+    div.innerHTML = `
+      ${boostHtml}
+      <div class="post-header">
+        <img class="post-avatar" src="${content.account.avatar}" onerror="this.style.display='none'" alt="">
+        <div>
+          <div class="post-author">${content.account.display_name || content.account.username}</div>
+          <div class="post-date">${date}</div>
+        </div>
+      </div>
+      <div class="post-body">${content.content}</div>
+      ${mediaHtml}
+      <div class="post-footer">
+        <span class="action">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+          </svg>${content.replies_count}
+        </span>
+        <span class="action">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+            <path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/>
+            <path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/>
+          </svg>${content.reblogs_count}
+        </span>
+        <span class="action">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+            <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+          </svg>${content.favourites_count}
+        </span>
+      </div>
+    `;
+    container.appendChild(div);
+  }
+}
+
+init();
+</script>
+```

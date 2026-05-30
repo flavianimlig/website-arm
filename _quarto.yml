@@ -4,9 +4,12 @@ project:
 website:
   title: "Alphorngruppe Rigi-Mythen"
   open-graph: true # https://quarto.org/docs/websites/website-tools.html#open-graph
-  page-footer: "Made with ❤️ and Quarto"
+  page-footer: "Erstellt mit ❤️ und Quarto"
   navbar:
     search: false
+    left:
+      - text: Neuigkeiten
+        href: news.qmd
   llms-txt: true
 
 format:
