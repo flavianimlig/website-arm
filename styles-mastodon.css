@@ -1,186 +1,182 @@
-/* styles-mastodon.css – Companion stylesheet for alphorngruppe.qmd */
+/* styles-mastodon.css – Alphorngruppe Rigi-Mythen, angepasst ans Website-Theme */
 
-#profile-card {
-  background: #fff;
-  border: 1px solid #e2e0da;
-  border-radius: 12px;
-  padding: 1.25rem;
-  margin-bottom: 1.5rem;
-  display: none;
-}
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600&display=swap');
 
-.profile-top {
-  display: flex;
-  gap: 14px;
-  align-items: flex-start;
-}
+/* ── Post-Liste ─────────────────────────────────────────── */
 
-.avatar {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  object-fit: cover;
-  flex-shrink: 0;
-}
-
-.profile-info h2 {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin: 0 0 3px 0;
-}
-
-.profile-info .handle {
-  font-size: 0.85rem;
-  color: #888;
-}
-
-.profile-bio {
-  font-size: 0.9rem;
-  color: #555;
-  margin-top: 12px;
-  line-height: 1.6;
-}
-
-.profile-stats {
-  display: flex;
-  gap: 20px;
-  margin-top: 14px;
-  flex-wrap: wrap;
-}
-
-.stat {
-  font-size: 0.85rem;
-  color: #888;
-}
-
-.stat strong {
-  color: #1a1a18;
-  font-weight: 600;
+#posts-section {
+  margin-top: 1.5rem;
 }
 
 .post-count {
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: #999;
-  letter-spacing: 0.08em;
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #B8A88A;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
-  margin-bottom: 12px;
+  margin-bottom: 1rem;
 }
+
+/* ── Einzelner Post ─────────────────────────────────────── */
 
 .post-card {
-  background: #fff;
-  border: 1px solid #e2e0da;
-  border-radius: 12px;
+  background: #EDE7DA;
+  border: none;
+  border-left: 3px solid #7A5C38;
+  border-radius: 6px;
   padding: 1rem 1.25rem;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
+  font-family: "Source Sans Pro", sans-serif;
+  color: #2E2A22;
 }
 
-.boost-label {
-  font-size: 0.78rem;
-  color: #999;
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
+/* Header (Avatar + Name) – dezent, klein */
 .post-header {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
+  gap: 8px;
+  margin-bottom: 8px;
+  opacity: 0.55;
 }
 
 .post-avatar {
-  width: 38px;
-  height: 38px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
 }
 
 .post-author {
-  font-size: 0.9rem;
+  font-size: 0.78rem;
   font-weight: 600;
-  margin: 0;
+  color: #2E2A22;
 }
 
 .post-date {
-  font-size: 0.78rem;
-  color: #aaa;
-  margin-top: 2px;
+  font-size: 0.75rem;
+  color: #7A5C38;
+  margin-left: auto;
 }
 
-.post-body {
-  font-size: 0.9rem;
-  line-height: 1.65;
-  color: #222;
-}
-
-.post-body a {
-  color: #3a7abf;
-  text-decoration: none;
-}
-
-.post-body a:hover { text-decoration: underline; }
-
-.post-body p {
-  margin-bottom: 0.5em;
-}
-
-.post-body p:last-child { margin-bottom: 0; }
-
-.media-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  gap: 6px;
-  margin-top: 12px;
-}
-
-.media-grid img {
-  width: 100%;
-  aspect-ratio: 1;
-  object-fit: cover;
-  border-radius: 8px;
-}
-
-.post-footer {
-  display: flex;
-  gap: 20px;
-  margin-top: 12px;
-}
-
-.action {
-  font-size: 0.78rem;
-  color: #aaa;
+/* Boost-Label */
+.boost-label {
+  font-size: 0.75rem;
+  color: #B8A88A;
+  margin-bottom: 6px;
   display: flex;
   align-items: center;
   gap: 5px;
 }
 
-.status-msg {
+/* Post-Text */
+.post-body {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: #2E2A22;
+}
+
+.post-body a {
+  color: #5A7A3A;
+  text-decoration: none;
+}
+
+.post-body a:hover {
+  text-decoration: underline;
+}
+
+.post-body p {
+  margin-bottom: 0.5em;
+}
+
+.post-body p:last-child {
+  margin-bottom: 0;
+}
+
+/* Bilder – grösser, volle Breite */
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.media-grid img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 5px;
+  border: 1px solid #D9CFBF;
+}
+
+/* Ein einzelnes Bild: volle Breite */
+.media-grid:has(img:only-child) img {
+  aspect-ratio: 16 / 9;
+}
+
+/* Footer (Reaktionen) */
+.post-footer {
+  display: flex;
+  gap: 18px;
+  margin-top: 12px;
+  border-top: 1px solid #D9CFBF;
+  padding-top: 8px;
+}
+
+.action {
+  font-size: 0.78rem;
+  color: #B8A88A;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.action svg {
+  width: 13px;
+  height: 13px;
+}
+
+/* ── Mehr-laden-Button ──────────────────────────────────── */
+
+#load-more-row {
+  text-align: center;
+  padding: 1rem 0 2rem;
+  display: none;
+}
+
+#load-more-row button {
+  padding: 0.5rem 1.5rem;
+  border: 1px solid #7A5C38;
+  border-radius: 5px;
+  background: #F7F3EC;
+  color: #7A5C38;
+  font-family: "Source Sans Pro", sans-serif;
   font-size: 0.9rem;
-  color: #999;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+#load-more-row button:hover {
+  background: #7A5C38;
+  color: #F7F3EC;
+}
+
+/* ── Status / Fehler ────────────────────────────────────── */
+
+.status-msg {
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: 0.9rem;
+  color: #B8A88A;
   padding: 2rem 0;
   text-align: center;
 }
 
 .error-msg {
+  font-family: "Source Sans Pro", sans-serif;
   font-size: 0.9rem;
-  color: #b33;
+  color: #8B3A2A;
   padding: 1rem 0;
   text-align: center;
 }
-
-#load-more-row button {
-  padding: 0.5rem 1.25rem;
-  border: 1px solid #d0cec6;
-  border-radius: 8px;
-  background: #fff;
-  color: #1a1a18;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: background 0.15s;
-}
-
-#load-more-row button:hover { background: #eeecea; }

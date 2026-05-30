@@ -11,6 +11,12 @@ website:
       - text: Neuigkeiten
         href: news.qmd
   llms-txt: true
+  announcement:
+    icon: info-circle
+    content: "Alphornbeizli in Lauerz am SlowUp Schwyz vom 31. Mai 2026. Wir freuen uns auf euch!"
+    type: success
+    position: below-navbar
+    dismissible: false
 
 format:
   html:
