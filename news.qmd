@@ -5,10 +5,16 @@ format:
     page-layout: article
     toc: false
     echo: false
-    css: styles-mastodon.css
+    css:
+      - styles-mastodon.css
+      - https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css
+    include-after-body:
+      text: "<script src=\"https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js\"></script>"
 ---
 
 ```{=html}
+<div id="profile-card"></div>
+
 <div id="posts-section" style="display:none">
   <p id="post-count" class="post-count"></p>
   <div id="posts-container"></div>
@@ -24,10 +30,19 @@ format:
 const INSTANCE = 'swiss.social';
 const USERNAME  = 'alphorngruppe_rigi_mythen';
 
-let accountId = null;
-let maxId     = null;
+let accountId  = null;
+let maxId      = null;
 let totalShown = 0;
-let fetching  = false;
+let fetching   = false;
+
+function initLightbox() {
+  if (window._mastodonLightbox) window._mastodonLightbox.destroy();
+  window._mastodonLightbox = GLightbox({
+    selector: '.glightbox',
+    loop: true,
+    effect: 'zoom'
+  });
+}
 
 function setStatus(msg) {
   const el = document.getElementById('status-msg');
@@ -45,7 +60,7 @@ function updateCount() {
 }
 
 async function init() {
-  setStatus('Lade Profil…');
+  setStatus('Lade Posts…');
   try {
     const res = await fetch(
       `https://${INSTANCE}/api/v1/accounts/lookup?acct=${USERNAME}`
@@ -53,36 +68,12 @@ async function init() {
     if (!res.ok) throw new Error(`Profil nicht gefunden (HTTP ${res.status})`);
     const account = await res.json();
     accountId = account.id;
-    <!-- renderProfile(account); -->
     setStatus('Lade Posts…');
     await loadMore();
   } catch (e) {
     setStatus('');
     setError('Fehler: ' + e.message);
   }
-}
-
-function renderProfile(a) {
-  const followersK = a.followers_count >= 1000
-    ? (a.followers_count / 1000).toFixed(1) + 'K'
-    : a.followers_count.toLocaleString('de-CH');
-  const bio = a.note ? a.note.replace(/<[^>]+>/g, '') : '';
-  document.getElementById('profile-card').innerHTML = `
-    <div class="profile-top">
-      <img class="avatar" src="${a.avatar}" onerror="this.style.display='none'" alt="">
-      <div class="profile-info">
-        <h2>${a.display_name || a.username}</h2>
-        <div class="handle">@${a.username}@${INSTANCE}</div>
-      </div>
-    </div>
-    ${bio ? `<div class="profile-bio">${bio}</div>` : ''}
-    <div class="profile-stats">
-      <span class="stat"><strong>${a.statuses_count.toLocaleString('de-CH')}</strong> Posts</span>
-      <span class="stat"><strong>${followersK}</strong> Follower</span>
-      <span class="stat"><strong>${a.following_count.toLocaleString('de-CH')}</strong> Folge ich</span>
-    </div>
-  `;
-  document.getElementById('profile-card').style.display = 'block';
 }
 
 async function loadMore() {
@@ -112,6 +103,7 @@ async function loadMore() {
     document.getElementById('posts-section').style.display = 'block';
     document.getElementById('load-more-row').style.display = 'block';
     setStatus('');
+    initLightbox();
   } catch (e) {
     setStatus('');
     setError('Fehler beim Laden: ' + e.message);
@@ -129,14 +121,23 @@ function renderPosts(posts) {
     const date = new Date(content.created_at).toLocaleDateString('de-CH', {
       day: 'numeric', month: 'short', year: 'numeric'
     });
+
     const media = (content.media_attachments || [])
       .filter(m => m.type === 'image')
       .slice(0, 4);
+
+    // Jedes Bild wird als Lightbox-Link gerendert
     const mediaHtml = media.length > 0
-      ? `<div class="media-grid">${media.map(m =>
-          `<img src="${m.preview_url}" alt="${m.description || ''}">`
+      ? `<div class="media-grid">${media.map((m) => `
+          <a href="${m.url}"
+             class="glightbox"
+             data-gallery="mastodon-galerie"
+             data-description="${m.description || ''}">
+            <img src="${m.preview_url}" alt="${m.description || ''}">
+          </a>`
         ).join('')}</div>`
       : '';
+
     const boostHtml = isBoost
       ? `<div class="boost-label">
            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">

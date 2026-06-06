@@ -180,3 +180,26 @@
   padding: 1rem 0;
   text-align: center;
 }
+
+/* ── GLightbox – Bild-Links ─────────────────────────────── */
+
+.media-grid a {
+  display: block;
+  border-radius: 5px;
+  overflow: hidden;
+  cursor: zoom-in;
+  transition: opacity 0.15s;
+}
+
+.media-grid a:hover {
+  opacity: 0.88;
+}
+
+.media-grid a img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 0;
+  border: none;
+}

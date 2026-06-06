@@ -13,7 +13,7 @@ website:
   llms-txt: true
   announcement:
     icon: info-circle
-    content: "Alphornbeizli in Lauerz am SlowUp Schwyz vom 31. Mai 2026. Wir freuen uns auf euch!"
+    content: "Wettvortrag der Alphorngruppe Rigi-Mythen am Sa, 27. Juni 2026, um 15.30 Uhr auf dem Wettspielplatz beim Schulhaus St. Johann in Basel. Wir freuen uns auf euch!"
     type: success
     position: below-navbar
     dismissible: false
