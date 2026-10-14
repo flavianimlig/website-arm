@@ -13,7 +13,7 @@ website:
   llms-txt: true
   announcement:
     icon: info-circle
-    content: "Wettvortrag der Alphorngruppe Rigi-Mythen am Sa, 27. Juni 2026, um 15.30 Uhr auf dem Wettspielplatz beim Schulhaus St. Johann in Basel. Wir freuen uns auf euch!"
+    content: "Am 23. Oktober 2026 sind wir musikalisch in Zug auf dem oberen Landsgemeindeplatz unterwegs, ungefähr 18.30 Uhr. Wir freuen uns auf viele Zuhörerinnen und Zuhörer!"
     type: success
     position: below-navbar
     dismissible: false
